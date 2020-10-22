@@ -1,36 +1,37 @@
-import React from 'react'
+import React from "react";
+import "../css/Subtotal.css";
 import CurrencyFormat from "react-currency-format";
-
-import '../css/Subtotal.css'
+import { useStateValue } from "./Stateprovider";
+import { getBasketTotal } from "./reducer";
+import { useHistory } from "react-router-dom";
 
 function Subtotal() {
-    return (
-        <div className="subtotal">
-            <CurrencyFormat
-                renderText={(value) => (
-                <>
-                    <p>
-                    {/* Part of the homework */}
-                    {/* Subtotal ({basket.length} items): <strong>{value}</strong> */}
-                    Subtotal (0 items): <strong>0</strong>
-                    </p>
-                    <small className="subtotal__gift">
-                        <input type="checkbox" /> This order contains a gift
-                    </small>
-                </>
-                )}
-                decimalScale={2}
-                // value={getBasketTotal(basket)} // Part of the homework
-                value={0} // Part of the homework
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₹"}
-            />
+  const history = useHistory();
+  const [{ basket }, dispatch] = useStateValue();
 
-            {/* <button onClick={e => history.push('/payment')}>Proceed to Checkout</button> */}
-            <button >Proceed to Checkout</button>
-        </div>
-    )
+  return (
+    <div className="subtotal">
+      <CurrencyFormat
+        renderText={(value) => (
+          <>
+            <p>
+              Subtotal ({basket.length} items): <strong>{value}</strong>
+            </p>
+            <small className="subtotal__gift">
+              <input type="checkbox" /> This order contains a gift
+            </small>
+          </>
+        )}
+        decimalScale={2}
+        value={getBasketTotal(basket)} 
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"$"}
+      />
+
+      <button onClick={e => history.push('/payment')}>Proceed to Checkout</button>
+    </div>
+  );
 }
 
-export default Subtotal
+export default Subtotal;
